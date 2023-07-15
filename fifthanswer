@@ -1,0 +1,54 @@
+question link -: https://www.interviewbit.com/problems/matrix-median/
+solution -:
+public class Solution {
+    public int findMedian(int[][] A) {
+    int min_median = -1;
+        int max_median = -1;
+        int rows = A.length;
+        int columns = A[0].length;
+        for (int i = 0; i < rows; i++) {
+            int median = A[i][columns / 2];
+            if (i == 0) {
+                min_median = median;
+                max_median = median;
+            } else {
+                if (median < min_median) {
+                    min_median = median;
+                } else if (median > max_median) {
+                    max_median = median;
+                }
+            }
+        }
+
+        int desired = (rows * columns + 1) / 2;
+        while (min_median < max_median) {
+            int mid = min_median + (max_median - min_median) / 2;
+            int count = 0;
+            for (int i = 0; i < rows; i++) {
+                int index = upper_bound(A[i], mid);
+                count += index;
+            }
+            if (count < desired) {
+                min_median = mid + 1;
+            } else {
+                max_median = mid;
+            }
+
+        }
+        return min_median;
+    }
+
+    public static int upper_bound(int[] A, int target) {
+        int max = A.length, min = -1;
+        while (max - min > 1) {
+            int mid = (max + min) / 2;
+            if (A[mid] <= target) {
+                min = mid;
+            } else {
+                max = mid;
+            }
+        }
+        return max;
+    }
+    
+}
